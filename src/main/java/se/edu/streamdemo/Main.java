@@ -5,6 +5,9 @@ import se.edu.streamdemo.task.Deadline;
 import se.edu.streamdemo.task.Task;
 
 import java.util.ArrayList;
+import java.util.stream.Collector;
+
+import static java.util.stream.Collectors.toList;
 
 public class Main {
     public static void main(String[] args) {
@@ -17,6 +20,11 @@ public class Main {
 
         System.out.println("Printing deadlines ...");
         printDeadlines(tasksData);
+        System.out.println("Printing deadlines to stream ...");
+        printDeadlinesUsingStream(tasksData);
+
+        ArrayList<Task> filteredList = filterByTaskString(tasksData,"10");
+        System.out.println(filteredList);
 
         System.out.println("Total number of deadlines: " + countDeadlines(tasksData));
 
@@ -45,5 +53,21 @@ public class Main {
             }
         }
     }
+
+    public static void printDeadlinesUsingStream(ArrayList<Task> tasks) {
+        tasks.stream()
+                .filter(t -> t instanceof Deadline)
+                .sorted((t1,t2) -> t1.getDescription().compareToIgnoreCase(t2.getDescription()))
+                .forEach(System.out::println);
+    }
+
+    public static ArrayList<Task> filterByTaskString(ArrayList<Task> tasks, String filterString) {
+        ArrayList<Task> filterList = (ArrayList<Task>)
+                tasks.stream()
+                .filter(t -> t.getDescription().contains(filterString))
+                .collect(toList());
+        return filterList;
+    }
+
 
 }
