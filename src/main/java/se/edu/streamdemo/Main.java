@@ -46,4 +46,12 @@ public class Main {
         }
     }
 
+    public static int printDeadlinesWithStreams(ArrayList<Task> tasks) {
+        int count = 0;
+        count = (int) tasks.stream()
+                .filter((t) -> t instanceof Deadline)//lambda function, what you wanna achieve is stated behind the arrow
+                .count();
+
+        return count;
+    }
 }
